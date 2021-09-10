@@ -5,9 +5,9 @@ public class Person extends Contact{
     private String birthDate;
     private String gender;
 
-    public Person(boolean isPerson, String name, String surname, String  birthDate, String gender,
+    public Person(String name, String surname, String  birthDate, String gender,
                   String phoneNumber) {
-        super(isPerson, name, phoneNumber);
+        super(name, phoneNumber);
         this.surname = surname;
         setBirthDate(birthDate);
         setGender(gender);
@@ -15,10 +15,6 @@ public class Person extends Contact{
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public String getSurname() {
-        return surname;
     }
 
     public void setBirthDate(String birthDate) {
@@ -30,10 +26,6 @@ public class Person extends Contact{
         }
     }
 
-    public String getBirthDate() {
-        return birthDate;
-    }
-
     public void setGender(String gender) {
         if (!gender.isEmpty()) {
             this.gender = gender;
@@ -43,7 +35,23 @@ public class Person extends Contact{
         }
     }
 
-    public String getGender() {
-        return gender;
+    @Override
+    public String toString() {
+        return String.format("Name: %s \n" +
+                "Surname: %s \n" +
+                "Birth date: %s \n" +
+                "Gender: %s \n" +
+                "Number: %s \n" +
+                "Time created: %s\n" +
+                "Time last edit: %s", name, surname, birthDate, gender, phoneNumber, getCreationDateTime(), getEditDateTime());
+    }
+
+    @Override
+    public String getFullName() {
+        return name + " " + surname;
+    }
+    @Override
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

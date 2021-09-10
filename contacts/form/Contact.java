@@ -3,35 +3,23 @@ package contacts.form;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Contact {
-    protected boolean isPerson;
+public abstract class Contact {
     protected String name;
     protected String phoneNumber;
     protected LocalDateTime creationDateTime;
     protected LocalDateTime editDateTime;
 
-    public Contact (Boolean isPerson, String name, String phoneNumber) {
-        this.isPerson = isPerson;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+    public Contact (String name, String phoneNumber) {
         this.name = name;
         setPhoneNumber(phoneNumber);
         this.creationDateTime = LocalDateTime.now();
         this.editDateTime = LocalDateTime.now();
     }
 
-    public void setPerson(boolean person) {
-        isPerson = person;
-    }
-
-    public boolean isPerson() {
-        return isPerson;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -41,11 +29,6 @@ public class Contact {
             this.phoneNumber = "[no number]";
             System.out.println("Wrong number format!");
         }
-
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public boolean hasNumber() {
@@ -74,7 +57,6 @@ public class Contact {
     }
 
     public String getCreationDateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         String creationDateTime = this.creationDateTime.format(formatter);
         return creationDateTime;
     }
@@ -84,8 +66,15 @@ public class Contact {
     }
 
     public String getEditDateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         String editDateTime = this.editDateTime.format(formatter);
         return editDateTime;
     }
+
+    public boolean isPerson() {
+        return this instanceof Person;
+    }
+
+    public abstract String getFullName();
+
+    public abstract String getPhoneNumber();
 }
