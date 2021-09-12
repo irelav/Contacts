@@ -1,5 +1,5 @@
-# Contacts
-## Contact Phonebook Java Program
+# Contacts Phonebook 
+## Java Program
 
 ###### Description:
 This project helps to create and manage contacts (like on the mobile phone) and search for people or organizations by name or phone number.
