@@ -3,6 +3,7 @@ package contacts;
 import contacts.commands.*;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Menu {
@@ -10,22 +11,32 @@ public class Menu {
     public static void displayMenu() {
         HashMap<String, Command> commands = new HashMap<>();
         commands.put("add", new AddCommand());
-        commands.put("edit", new EditCommand());
-        commands.put("remove", new RemoveCommand());
-        commands.put("info", new DisplayInfoCommand());
+        commands.put("list", new DisplayListCommand());
+        commands.put("search", new SearchCommand());
         commands.put("count", new CountCommand());
         Scanner sc = new Scanner(System.in);
-        boolean exit = false;
-        do {
-            System.out.print("Enter action (add, remove, edit, count, info, exit): ");
-            String action = sc.nextLine();
-            if (action.equals("exit")) {
-                exit = true;
-            } else {
-                Command command = commands.get(action);
-                command.execute();
+        boolean exitMenu = false;
+        while (!exitMenu) {
+            System.out.print("[menu] Enter action (add, list, search, count, exit): ");
+            String action = sc.nextLine().toLowerCase(Locale.ROOT);
+            try {
+                if (action.equals("exit")) {
+                    exitMenu = true;
+                    try {
+                        PhoneBook.serialize(PhoneBook.getContactsList(), PhoneBook.getFilename());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                } else {
+                    PhoneBook.deserialize();
+                    Command command = commands.get(action);
+                    command.execute(action);
+                }
+                System.out.println();
+            } catch (Exception e) {
+                System.out.print("Wrong input!");
+                System.out.println(e.getMessage());
             }
-            System.out.println();
-        } while (!exit);
+        }
     }
 }

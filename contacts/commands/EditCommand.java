@@ -5,6 +5,7 @@ import contacts.form.Contact;
 import contacts.form.Organization;
 import contacts.form.Person;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -12,14 +13,11 @@ public class EditCommand implements Command {
     private Scanner sc = new Scanner(System.in);
 
     @Override
-    public void execute() {
+    public void execute(String action) throws IOException {
         if (PhoneBook.size() == 0) {
             System.out.println("No records to edit!");
         } else {
-            Scanner sc = new Scanner(System.in);
-            new DisplayListCommand().execute();
-            System.out.print("Enter index to show info: ");
-            int recordNumber = Integer.valueOf(sc.nextLine()) - 1;
+            int recordNumber = Integer.parseInt(action) - 1;
             Contact contactToUpdate = PhoneBook.get(recordNumber);
             if (contactToUpdate.isPerson()) {
                 editPerson((Person) contactToUpdate, recordNumber);
@@ -29,7 +27,7 @@ public class EditCommand implements Command {
         }
     }
 
-    private void editPerson(Person contactToUpdate, int recordNumber) {
+    private void editPerson(Person contactToUpdate, int recordNumber) throws IOException {
         System.out.print("Select a field (name, surname, birth, gender, number): ");
         String option = sc.nextLine();
         switch (option) {
@@ -50,12 +48,7 @@ public class EditCommand implements Command {
                 break;
             case "gender":
                 System.out.print("Enter gender: ");
-                String gender = sc.nextLine();
-                if (gender != null & (gender.equals("M") || gender.equals("F"))) {
-                    contactToUpdate.setGender(gender);
-                } else {
-                    System.out.println("Bad gender!");
-                }
+                contactToUpdate.setGender(sc.nextLine());
                 saveContactEdit(contactToUpdate, recordNumber);
                 break;
             case "number":
@@ -64,19 +57,19 @@ public class EditCommand implements Command {
                 saveContactEdit(contactToUpdate, recordNumber);
                 break;
             default:
-                System.out.println("Wrong input!");
+                System.out.print("Wrong input!");
                 break;
         }
     }
 
-    private void saveContactEdit(Person contactToUpdate, int recordNumber) {
+    private void saveContactEdit(Person contactToUpdate, int recordNumber) throws IOException {
         contactToUpdate.setEditDateTime(LocalDateTime.now());
         PhoneBook.set(recordNumber, contactToUpdate);
-        System.out.println("The record person updated!");
+        new DisplayInfoCommand().execute(String.valueOf(recordNumber + 1));
     }
 
-    private void editOrganization(Organization contactToUpdate, int recordNumber) {
-        System.out.print("Select a field (name, address, number):");
+    private void editOrganization(Organization contactToUpdate, int recordNumber) throws IOException {
+        System.out.print("Select a field (name, address, number): ");
         String option = sc.nextLine();
         switch (option) {
             case "name":
@@ -85,7 +78,7 @@ public class EditCommand implements Command {
                 saveContactEdit(contactToUpdate, recordNumber);
                 break;
             case "address":
-                System.out.print("Enter surname: ");
+                System.out.print("Enter address: ");
                 contactToUpdate.setAddress(sc.nextLine());
                 saveContactEdit(contactToUpdate, recordNumber);
                 break;
@@ -95,14 +88,14 @@ public class EditCommand implements Command {
                 saveContactEdit(contactToUpdate, recordNumber);
                 break;
             default:
-                System.out.println("Wrong input!");
+                System.out.print("Wrong input!");
                 break;
         }
     }
 
-    private void saveContactEdit(Organization contactToUpdate, int recordNumber) {
+    private void saveContactEdit(Organization contactToUpdate, int recordNumber) throws IOException {
         contactToUpdate.setEditDateTime(LocalDateTime.now());
         PhoneBook.set(recordNumber, contactToUpdate);
-        System.out.println("The record organization updated!");
+        new DisplayInfoCommand().execute(String.valueOf(recordNumber + 1));
     }
 }

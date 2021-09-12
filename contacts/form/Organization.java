@@ -12,6 +12,10 @@ public class Organization extends Contact {
         this.address = address;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     @Override
     public String toString() {
         return String.format("Organization name: %s \n" +

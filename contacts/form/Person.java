@@ -1,6 +1,8 @@
 package contacts.form;
 
-public class Person extends Contact{
+import java.util.Locale;
+
+public class Person extends Contact {
     private String surname;
     private String birthDate;
     private String gender;
@@ -22,17 +24,21 @@ public class Person extends Contact{
             this.birthDate = birthDate;
         } else {
             this.birthDate = "[no data]";
-            System.out.println("Bad birth date!");
+            System.out.println("Wrong birth date input");
         }
     }
 
     public void setGender(String gender) {
-        if (!gender.isEmpty()) {
-            this.gender = gender;
+        if (gender != null & (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F"))) {
+            this.gender = gender.toUpperCase(Locale.ROOT);
         } else {
             this.gender = "[no data]";
-            System.out.println("Bad gender");
+            System.out.println("Wrong gender input");
         }
+    }
+
+    public String getBirthDate() {
+        return birthDate;
     }
 
     @Override
@@ -50,6 +56,7 @@ public class Person extends Contact{
     public String getFullName() {
         return name + " " + surname;
     }
+
     @Override
     public String getPhoneNumber() {
         return phoneNumber;

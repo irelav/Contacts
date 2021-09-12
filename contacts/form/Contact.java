@@ -1,15 +1,17 @@
 package contacts.form;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public abstract class Contact {
+public abstract class Contact implements Serializable {
     protected String name;
     protected String phoneNumber;
     protected LocalDateTime creationDateTime;
     protected LocalDateTime editDateTime;
+    private static final long serialVersionUID = 372626319979007907L;
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     public Contact (String name, String phoneNumber) {
         this.name = name;
@@ -27,7 +29,7 @@ public abstract class Contact {
             this.phoneNumber = phoneNumber;
         } else {
             this.phoneNumber = "[no number]";
-            System.out.println("Wrong number format!");
+            System.out.println("Wrong number format");
         }
     }
 
@@ -36,13 +38,10 @@ public abstract class Contact {
     }
 
     public boolean checkNumberFormat(String phoneNumber) {
-        String regex1 = "^\\+?[a-zA-Z0-9]+(\\s|-)*([a-zA-Z0-9]{2,}+|(\\s|-)[a-zA-Z0-9]{2,}+)*$";
-        String regex2 = "^\\+?([\\(]([a-zA-Z0-9]+)[\\)])((\\s|-)*)([a-zA-Z0-9]{2,}+|(\\s|-)[a-zA-Z0-9]{2,}+)*$";
-        String regex3 = "^\\+?([a-zA-Z0-9]+)((\\s|-)*([\\(][a-zA-Z0-9]{2,}+[\\)])|(\\s|-)[a-zA-Z0-9]{2,}+)*$";
-        boolean correctPhoneNumberFormat = phoneNumber.matches(regex1) ||
-                phoneNumber.matches(regex2) || phoneNumber.matches(regex3);
+        String regex = "((\\+?\\([a-z\\d]+\\))(((\\s|-)[a-z\\d]{2,})*))|" +
+                "((\\+?[a-z\\d]+)(((-|\\s)\\([a-z\\d]{2,}\\))?)(((\\s|-)[a-z\\d]{2,})*))";
 
-        return correctPhoneNumberFormat;
+        return phoneNumber.matches(regex);
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
@@ -52,6 +51,7 @@ public abstract class Contact {
         }
         return personHasNumber;
     }
+
     public void setCreationDateTime(LocalDateTime creationDateTime) {
         this.creationDateTime = creationDateTime;
     }
